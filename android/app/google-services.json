@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081886983612",
+    "project_id": "tapzy-6e9a9",
+    "storage_bucket": "tapzy-6e9a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081886983612:android:b3627794830f8a0fe757b9",
+        "android_client_info": {
+          "package_name": "com.android.tapzy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081886983612-aphlaii5ahbo48rbgrc55rqutgdrb48l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-RbqLutx9EEaw5sM7yOPjPYj_uLT2Juk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081886983612-aphlaii5ahbo48rbgrc55rqutgdrb48l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
