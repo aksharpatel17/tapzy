@@ -10,7 +10,7 @@ void main() {
   runApp(MyApp());
 }
 
-Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message)async  {
   if (message.containsKey('data')) {
     // Handle data message
     final dynamic data = message['data'];
@@ -21,6 +21,7 @@ Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
     final dynamic notification = message['notification'];
   }
   print("In background message wohooo!");
+  debugPrint("Handling the message in the background");
 
   // Or do other work.
 }
