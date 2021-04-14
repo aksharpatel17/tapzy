@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^0.3.5
   firebase_auth: ^0.20.1
   firebase_dynamic_links: ^0.5.1
+  fancy_bottom_navigation: ^0.3.2
+  timer_count_down: 1.0.4+1
 
 dev_dependencies:
   flutter_test:
