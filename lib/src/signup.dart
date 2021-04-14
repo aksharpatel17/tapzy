@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:tapzy/src/Widget/bezierContainer.dart';
 import 'package:tapzy/src/loginPage.dart';
@@ -18,6 +19,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
   Widget _backButton() {
     return InkWell(
       onTap: () {
@@ -54,6 +57,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
           TextField(
               obscureText: isPassword,
+              controller:isPassword?_passwordController:_emailController,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   fillColor: Color(0xfff3f3f4),
@@ -147,7 +151,28 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Username",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+
+
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true))
+            ],
+          ),
+        ),
         _entryField("Email id"),
         _entryField("Password", isPassword: true),
       ],
@@ -155,18 +180,47 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _register() async {
-    final User user = (await
-    _auth.createUserWithEmailAndPassword(
-      email: "axarpatel01@gmail.com",
-      password: "Test1234",
-    )
-    ).user;
-    if (user != null) {
-      print("Register successful");
-    } else {
-      setState(() {
-        print("Register failed");
-      });
+    try{
+      final User user = (await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      ))
+          .user;
+      if (user != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => LoginPage(),
+          ),
+          (route) => false,
+        );
+      } else {
+
+        Flushbar(
+          title: "Unable to Register",
+          message: "Try again Later",
+          backgroundColor: Color(0xff3a7bd5),
+          duration: Duration(seconds: 2),
+        )..show(context);
+      }
+    }on FirebaseAuthException catch (e) {
+      Flushbar(
+        title: e.code.toUpperCase(),
+        message: "Enter correct details",
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+
+      )
+        ..show(context);
+    } catch (e) {
+      Flushbar(
+        title: "Invalid Email",
+
+        backgroundColor: Color(0xff3a7bd5),
+        duration: Duration(seconds: 2),
+
+      )
+        ..show(context);
     }
   }
 
@@ -213,5 +267,14 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       ),
     );
+  }
+
+
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

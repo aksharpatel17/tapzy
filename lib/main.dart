@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: FirebaseRealtimeDemoScreen(),
+      home: WelcomePage(),
     );
   }
 }
@@ -275,8 +275,10 @@ class _FirebaseRealtimeDemoScreenState
         children:<Widget>[
           Positioned(top: 40, left: 0, child: InkWell(
             onTap: () {
-              Navigator.pop(context);
-            },
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => WelcomePage()));
+    },
+
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
@@ -321,6 +323,11 @@ class _FirebaseRealtimeDemoScreenState
               ),
 
                   SizedBox(height: height * .08),
+                  Text(
+                    "Select Time",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  SizedBox(height: 10,),
                   InkWell(
                     onTap: () =>
                     {
@@ -328,28 +335,20 @@ class _FirebaseRealtimeDemoScreenState
                     } ,
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.symmetric(vertical: 15),
+                      padding: EdgeInsets.symmetric(vertical: 13),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey.shade200,
-                                offset: Offset(2, 4),
-                                blurRadius: 5,
-                                spreadRadius: 2)
-                          ],
-                          gradient: LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [Color(0xff00d2ff), Color(0xff3a7bd5)])),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Color(0xff3a7bd5), width: 2),
+                      ),
                       child: Text(
                         _timeController.text,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        style: TextStyle(fontSize: 20, color: Color(0xff3a7bd5)),
                       ),
                     ),
                   ),
                   SizedBox(height: height * .03),
+
                   TextField(
                     keyboardType: TextInputType.number,
                     autofocus: false,
@@ -377,8 +376,8 @@ class _FirebaseRealtimeDemoScreenState
                     onTap: () async {
                       await createData().then((value) =>
                       Flushbar(
-                        title: "Hey Akshar",
-                        message: "Data Created",
+                        title: "Data Uploaded Sucessfully",
+                        message: " ",
                         backgroundColor: Color(0xff3a7bd5),
                         duration: Duration(seconds: 2),
 
@@ -414,8 +413,8 @@ class _FirebaseRealtimeDemoScreenState
                     onTap: () async {
                       await readData().then((value) =>
                       Flushbar(
-                        title: "Hey Akshar",
-                        message: "Name=${name1} Time=${time} Minutes=${minutes}",
+                        title: "Data from Firebase",
+                        message: "Time=${time} Minutes=${minutes}",
                         backgroundColor: Color(0xff3a7bd5),
                         duration: Duration(seconds: 2),
 

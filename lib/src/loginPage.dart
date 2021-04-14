@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tapzy/main.dart';
 import 'package:tapzy/src/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flushbar/flushbar.dart';
@@ -24,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
 
   String email='';
   String password = '';
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
 
   Widget _backButton() {
     return InkWell(
@@ -62,6 +65,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextFormField(
                 obscureText: isPassword,
+                controller:isPassword?_passwordController:_emailController,
+
                 onChanged: (val){
                   isPassword?setState(()=> password=val):setState(()=>email=val);
                   print('email: '+email);
@@ -81,23 +86,48 @@ class _LoginPageState extends State<LoginPage> {
   Widget _submitButton() {
     return InkWell(
       onTap: ()async{
-        print("Login button pressed...");
-        {
-          final User user = _auth.currentUser;
-          if (user == null) {
-//6
+        print(_emailController.text);
+        try{
+          final User user = (await _auth.signInWithEmailAndPassword(
+            email: _emailController.text.toString().trim(),
+            password: _passwordController.text.toString().trim(),
+          ))
+              .user;
+          if (user != null) {
+            print("User not null");
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => FirebaseRealtimeDemoScreen(),
+              ),
+                  (route) => false,
+            );
+          } else {
+            setState(() {
+              print("Register failed");
+            });
 
-
-            print("No user");
-
-            return;
           }
-          await _auth.signOut();
-          final String uid = user.uid;
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(uid + ' has successfully signed out.'),
-          ));
-        }},
+        } on FirebaseAuthException catch (e) {
+          Flushbar(
+            title: "Wrong email or Password",
+            message: e.code,
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+
+          )
+            ..show(context);
+        } catch (e) {
+          Flushbar(
+            title: "Wrong email or Password",
+            message: "Enter correct email and password",
+            backgroundColor: Color(0xff3a7bd5),
+            duration: Duration(seconds: 2),
+
+          )
+            ..show(context);
+        }
+        },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 15),
@@ -225,5 +255,11 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     ));
+  }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
